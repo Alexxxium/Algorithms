@@ -77,12 +77,12 @@ void RingBuffer<T>::push(const T vl)
 
 	buff[getCorrect(indexIn)] = vl;
 
-	if (getCorrect(indexIn) == indexOut)	// перезапись
+	if (getCorrect(indexIn) == indexOut)	
 		toNext(indexOut);
 
 	toNext(indexIn);
 
-	if (indexOut == -1)						// -1 означает первую запись, в том числе и после очистки буфера
+	if (indexOut == -1)						
 		indexOut = 0;
 }
 template<typename T>
@@ -91,13 +91,13 @@ void RingBuffer<T>::pop()
 	buff[getCorrect(indexOut)] = T(0);
 	toNext(indexOut);
 
-	if (indexOut == indexIn)				// удалился последний элемент
+	if (indexOut == indexIn)				
 		clear();
 }
 template<typename T>
 void RingBuffer<T>::clear()
 {
-	for (int i = 0; i < lenght; ++i) buff[i] = T(0);	// зануление для удобства
+	for (int i = 0; i < lenght; ++i) buff[i] = T(0);	
 
 	indexOut = -1;
 	indexIn = 0;
