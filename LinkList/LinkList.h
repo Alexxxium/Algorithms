@@ -29,8 +29,8 @@ public:
 	 ~LinkList();
 
 
-	int lenght()				   { return size;				  }
-	bool is_empty()				   { return first == nullptr;	  }
+	int lenght()				   { return size;	      }
+	bool is_empty()				   { return first == nullptr; }
 	T& operator[](const int index) { return getNode(index)->data; }
 
 
@@ -52,9 +52,8 @@ Node<T>* LinkList<T>::getNode(const int index)
 	if (is_empty() || index < 0 || index >= size)
 		throw 1;
 
-	// Смотрим от чего ближе итерироваться
 
-	if (index > size / 2)			// итерируемся от конца
+	if (index > size / 2)			
 	{
 		Node<T> *ptr = last;
 		for (int i = 0; i < (size - 1 - index); ++i)
@@ -62,7 +61,7 @@ Node<T>* LinkList<T>::getNode(const int index)
 
 		return ptr;
 	}
-	else							// итерируемся от начала
+	else							
 	{
 		Node<T> *ptr = first;
 		for (int i = 0; i < index; ++i)
@@ -125,7 +124,7 @@ void LinkList<T>::pop_front()
 	Node<T> *buff = first->next;
 
 	delete first;
-	if (!buff)						// если следующего элемента нет (в списке всего 1 элемент)
+	if (!buff)						
 		first = last = nullptr;
 	else
 	{
@@ -158,7 +157,7 @@ void LinkList<T>::pop_back()
 template<typename T>
 void LinkList<T>::insert(const int index, T vl)
 {
-	Node<T> *indexNode = getNode(index);		// функция может выбрасывать исключение (выполняет проверку на корректный индекс)
+	Node<T> *indexNode = getNode(index);		
 
 	if (index == 0)
 	{
