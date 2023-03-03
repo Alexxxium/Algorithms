@@ -95,36 +95,36 @@ void AvlTree<T>::print(Node<T> *curr)
 template<typename T>
 Node<T>* AvlTree<T>::removeRoot()
 {
-	if (root->left == root->right)					// случ. 1 -> детей нет
+	if (root->left == root->right)					
 	{
 		delete root;
 		root = nullptr;
 	}
-	else if (root->left && root->right)				// случ. 2 -> есть оба ребенка
+	else if (root->left && root->right)				
 	{
-		Node<T> *lt = root->left;						// запоминаем указатели
+		Node<T> *lt = root->left;						
 		Node<T> *rt = root->right;
 
-		delete root;								// удаляем узел
+		delete root;								
 
-		Node<T> *min = getMin(rt);						// получаем минимальный узел в правой ветке
-		min->right = removeMin(rt);					// получаем правую ветку узла с минимальным значением или nullptr
-		min->left = lt;								// указываем левое дерево
+		Node<T> *min = getMin(rt);						
+		min->right = removeMin(rt);					
+		min->left = lt;								
 
-		root = min;									// указываем новый корень
+		root = min;									
 
-		return balance(root);						// выполняем балансировку
+		return balance(root);						
 	}
-	else if (root->left)							// случ. 3 -> есть ребенок слева (справа нет, т.к. это уже случ. 2)
+	else if (root->left)							
 	{
-		Node<T> *lt = root->left;						// запоминаем левую ветку
+		Node<T> *lt = root->left;						
 		delete root;
-		root = lt;									// назначаем новый корень
+		root = lt;									
 		balance(root);
 	}
-	else											// случ. 4 -> есть ребенок справа
+	else											
 	{
-		Node<T> *rt = root->right;						// все аналогично случ. 3
+		Node<T> *rt = root->right;						
 		delete root;
 		root = rt;
 		balance(root);
@@ -144,7 +144,7 @@ Node<T>* AvlTree<T>::removeMin(Node<T> *node)
 	if (!node->left)
 		return node->right;
 
-	node->left = removeMin(node->left);				// ничего больше не указывает на старый узел -> его нужно запомнить еще до
+	node->left = removeMin(node->left);				
 	return balance(node);
 }
 template<typename T>
@@ -154,12 +154,12 @@ Node<T>* AvlTree<T>::remove(Node<T> *node, T vl)
 
 
 	if (vl < node->key)
-		node->left = remove(node->left, vl);		// (1) <- выход из функции с присваиванием готовой, отбаланнсированной ветки
+		node->left = remove(node->left, vl);		
 	else if (vl > node->key)
-		node->right = remove(node->right, vl);		// (2) <- аналогично (1)
+		node->right = remove(node->right, vl);		
 	else
 	{
-		if (node == root)							// если мы удаляем корень (мы сразу попадаем в ветку else)
+		if (node == root)							
 		{
 			removeRoot();
 			return nullptr;
@@ -170,10 +170,10 @@ Node<T>* AvlTree<T>::remove(Node<T> *node, T vl)
 
 		delete node;
 
-		if (!rt) return lt;							// (3) возвращаемся в точку (1) или (2)
+		if (!rt) return lt;							
 
-		Node<T> *min = getMin(rt);						// получаем минимальный узел в правой ветке
-		min->right = removeMin(rt);					// получаем правую ветку узла с минимальным значением или nullptr
+		Node<T> *min = getMin(rt);						
+		min->right = removeMin(rt);					
 		min->left = lt;
 
 		return balance(min);
@@ -242,8 +242,8 @@ Node<T>* AvlTree<T>::balance(Node<T> *node)
 	if (balanceFact(node) == 2)
 	{
 		if (balanceFact(node->right) < 0)
-			node->right = rightRotate(node->right);		// правое вращение в поддереве 
-		return leftRotate(node);						// + левое самого дерева	
+			node->right = rightRotate(node->right);		
+		return leftRotate(node);							
 	}
 	if (balanceFact(node) == -2)
 	{
@@ -259,8 +259,8 @@ Node<T>* AvlTree<T>::balance(Node<T> *node)
 template<typename T>
 void AvlTree<T>::push(const T &vl)
 {
-	Node<T> *newNode = insert(vl, root);		// возвращает узел сбаланнсированного дерева (мы будем начинать всегда с корня, так что вернуться может новый корень)
-	root = newNode;								// всегда запоминаем новый корень, даже если он не новый (для простоты)
+	Node<T> *newNode = insert(vl, root);		
+	root = newNode;								
 	++lenght;
 }
 template<typename T>
@@ -285,10 +285,10 @@ const T& AvlTree<T>::find(const T &vl)
 		else
 			curr = curr->right;
 	}
-	//if (!curr) throw 1;				// версия с выбрасыванием исключения, если объект не найден
+	//if (!curr) throw 1;				
 	//return curr->key;
 
-	return curr ? curr->key : T();		// если ничего не нашли, то возвращается пустой объект
+	return curr ? curr->key : T();		
 }
 
 
