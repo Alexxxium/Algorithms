@@ -10,7 +10,7 @@ private:
 
 	T *arr;
 
-	const float redist = 2;						// коэффициент перераспределения памяти 
+	const float redist = 2;						 
 	const size_t default_capacity = 32;			
 
 	size_t lenght, capacity;
@@ -90,7 +90,7 @@ void Heap<T>::redist_memory()
 	arr = new T[capacity];
 
 	for (int i = 0; i < lenght; ++i)
-		arr[i] = copy[i];									// <- C6386 "переполнение буфера..." и бла-бла-бла...
+		arr[i] = copy[i];			// <- C6386 Рё Р±Р»Р° Р±Р»Р° Р±Р»Р°
 	delete[] copy;
 }
 template<typename T>
@@ -103,10 +103,10 @@ void Heap<T>::swap(const size_t indx1, const size_t indx2)
 template<typename T>
 void Heap<T>::balance(const size_t indx)
 {
-	int left = 2 * indx + 1;			// дети (полученного индекса может и не быть в куче)
+	int left = 2 * indx + 1;			
 	int right = 2 * indx + 2;
 
-	if (left < lenght)					// если наш индекс действительно ребенок
+	if (left < lenght)					
 		if (arr[indx] < arr[left])
 		{
 			swap(indx, left);
@@ -126,21 +126,21 @@ void Heap<T>::push(const T vl)
 {
 	int i = lenght;
 	int parent = (i - 1) / 2;
-	arr[i] = vl;							// добавляем элемент в конец
+	arr[i] = vl;							
 
 	while (parent >= 0 && i > 0)
 	{
-		if (arr[i] > arr[parent])			// меняем местами родителя и новый объект
+		if (arr[i] > arr[parent])			
 			swap(i, parent);
-		else								// пока не дойдем до вершины или не получим подходящее место в куче
+		else								
 			break;
 
 		i = parent;
-		parent = (i - 1) / 2;				// берем родителя
+		parent = (i - 1) / 2;				
 	}
 	++lenght;
 
-	if (lenght == capacity)					// если вся память массива исчерпана
+	if (lenght == capacity)					
 		redist_memory();
 }
 template<typename T>
@@ -172,7 +172,7 @@ void Heap<T>::outHeap()
 
 			std::cout << arr[i];
 
-			if (arr[i] < 10)						// бонус пробел для однозначных чисел
+			if (arr[i] < 10)						
 				std::cout << ' ';
 
 			for (int j = 0; j < tabs * 2; ++j)
