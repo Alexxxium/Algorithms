@@ -63,7 +63,7 @@ void TestLinkList()
             break;
 
         default:
-            goto sas;                       // иногда консольне багается из-за не корректного символа (char, а ожидалось int)
+            goto sas;                       
             break;
         }
         std::cout << "\nList:\n";
