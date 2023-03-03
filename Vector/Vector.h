@@ -13,12 +13,10 @@ private:
 	int capacity,
 		default_capacity = 2;	
 	const float redist = 1.5;	
-
-	// ‘ункци€ перераспределени€ пам€ти
-	// — коэффициентом по умолчанию 1.5 (в параметр еще можно передать новую длину в методе resize)
+	
+	
 	void redist_memory(int new_capacity = 0);	
 	
-
 public:
 
 	Vector(const int lenght = 0);
@@ -26,9 +24,9 @@ public:
 	void resize(const int);
 	void outVector();
 
-	~Vector()						{ delete[] arr;         }
+	~Vector()			{ delete[] arr;         }
 	T& operator[](const T index)	{ return arr[index];    }
-	bool is_empty()					{ return capacity == 0; }
+	bool is_empty()			{ return capacity == 0; }
 };
 
 template <typename T>
@@ -43,7 +41,7 @@ Vector<T>::Vector(const int lenght): size(0), capacity(lenght)
 template <typename T>
 void Vector<T>::push_back(const T vl)
 {
-	if (size == capacity)			// проверка на перераспределение пам€ти
+	if (size == capacity)			
 		redist_memory();
 
 	arr[size] = vl;
@@ -57,7 +55,7 @@ void Vector<T>::resize(const int sz)
 	if (sz == capacity)
 		return;
 
-	if (sz == size && capacity > size)		// удал€ем лишнюю емкость через перезапись
+	if (sz == size && capacity > size)		
 		redist_memory(sz);
 	else if (sz < size)
 	{
@@ -67,7 +65,7 @@ void Vector<T>::resize(const int sz)
 	else if (sz > size)
 	{
 		redist_memory(sz);
-		size = sz;							// нова€ длина после перезаписи (если еще есть емкость, то идет запись 0)
+		size = sz;							
 	}
 }
 
@@ -97,14 +95,14 @@ void Vector<T>::redist_memory(int new_capacity)
 		capacity = default_capacity;
 	}
 
-	if (new_capacity)						// €вное перераспределение (через resize)
+	if (new_capacity)						
 		capacity = new_capacity;
-	else									// перераспределение по умолчнию (через push_back)
+	else									
 		capacity = capacity * redist;
 
 	int *copy = new T[capacity];
 	for (int i = 0; i < size; ++i)			
-		copy[i] = arr[i];					// перезапись	| C6386 <- на самом деле все под контролем
+		copy[i] = arr[i];					
 
 	for (int i = size; i < capacity; ++i)
 		copy[i] = 0;						
