@@ -82,7 +82,7 @@ void List<T>::push_front(T vl)
 {
 	Node<T>* newData = new Node<T>(vl);
 
-	if (is_empty())						// для первого элемента в списке
+	if (is_empty())						
 		first = last = newData;
 	else
 	{
@@ -96,7 +96,7 @@ void List<T>::push_back(T vl)
 {
 	Node<T> *newData = new Node<T>(vl);
 
-	if (is_empty())						// для первого элемента в списке
+	if (is_empty())						
 		first = last = newData;
 	else
 	{
@@ -131,14 +131,14 @@ void List<T>::pop_back()
 		return;
 	}
 
-	while (ptr->next)						// доходим до предспоследнего узла
+	while (ptr->next)						
 	{
 		buff = ptr;
 		ptr = ptr->next;
 	}
 	delete ptr;								
 	last = buff;
-	last->next = nullptr;					// забываем последний узел 
+	last->next = nullptr;					
 	--lenght;
 }
 template <typename T>
