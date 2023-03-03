@@ -27,17 +27,17 @@ private:
 	Node<T>* getMinNode(Node<T>*);
 	void  print(Node<T>*);
 	
-	// Беды реализации:
-	void funck1(Node<T>*, T);	// удаление, если дочерних объектов нет
-	void funck2(Node<T>*, T);	// удаление, если есть левый дочерний объект
-	void funck3(Node<T>*, T);	// удаление, если есть правый дочерний объект
-	void funck4(Node<T>*, T);	// удаление, если есть оба дочерних объекта
+	// Р‘РµРґС‹ СЂРµР°Р»РёР·Р°С†РёРё
+	void funck1(Node<T>*, T);	
+	void funck2(Node<T>*, T);	
+	void funck3(Node<T>*, T);	
+	void funck4(Node<T>*, T);	
 	
 public:
 
 	 Tree():top(nullptr) { /********************/ }
-	~Tree()				 { DestroyNode(top);	  }
-	bool is_empty()		 { return top == nullptr; }
+	~Tree()		     { DestroyNode(top);      }
+	bool is_empty()	     { return top == nullptr; }
 
 	void insert(T);
 	void pop(T vl);
@@ -111,9 +111,9 @@ template <typename T>
 void Tree<T>::pop(T vl)
 {
 	/*
-		1. нет детей
-		2. 1 ребенок (left or right)
-		3. 2 ребенка
+		1. РЅРµС‚ РґРµС‚РµР№
+		2. 1 СЂРµР±РµРЅРѕРє (left or right)
+		3. 2 СЂРµР±РµРЅРєР°
 		*/
 	Node<T> *curr = getNode(vl);
 
@@ -156,13 +156,12 @@ void Tree<T>::outTree()
 }
 
 
-// Беды реализации:
 template <typename T>
 void Tree<T>::funck1(Node<T> *curr, T vl)
 {
 	if (curr->left == curr->right)
 	{
-		if (curr->parent)							// если есть родитель
+		if (curr->parent)							
 		{
 			if (vl < curr->parent->data)
 				curr->parent->left = nullptr;
@@ -170,7 +169,7 @@ void Tree<T>::funck1(Node<T> *curr, T vl)
 				curr->parent->right = nullptr;
 			delete curr;
 		}
-		else {										// если родителя нет (вершина дерева)
+		else {										
 			delete curr;
 			top = nullptr;
 		}
@@ -180,7 +179,7 @@ void Tree<T>::funck1(Node<T> *curr, T vl)
 template <typename T>
 void Tree<T>::funck2(Node<T> *curr, T vl)
 {
-	if (curr == top)								// код удаления специально для вершины
+	if (curr == top)								
 	{
 		curr->left->parent = nullptr;
 		Node<T>* newTop = curr->left;
@@ -189,13 +188,13 @@ void Tree<T>::funck2(Node<T> *curr, T vl)
 		return;
 	}
 
-	if (vl < curr->parent->data)					// если мы наследовались слева
+	if (vl < curr->parent->data)					
 	{
 		curr->parent->left = curr->left;
 		curr->left->parent = curr->parent;
 		delete curr;
 	}
-	else											// если мы наследовались справа
+	else											
 	{
 		curr->parent->right = curr->left;
 		curr->left->parent = curr->parent;
@@ -205,7 +204,7 @@ void Tree<T>::funck2(Node<T> *curr, T vl)
 template <typename T>
 void Tree<T>::funck3(Node<T> *curr, T vl)
 {
-	if (curr == top)								// код удаления специально для вершины
+	if (curr == top)								
 	{
 		curr->right->parent = nullptr;
 		Node<T>* newTop = curr->right;
@@ -214,13 +213,13 @@ void Tree<T>::funck3(Node<T> *curr, T vl)
 		return;
 	}
 
-	if (vl < curr->parent->data)					// если мы наследовались слева
+	if (vl < curr->parent->data)					
 	{
 		curr->parent->left = curr->right;
 		curr->right->parent = curr->parent;
 		delete curr;
 	}
-	else											// если мы наследовались справа
+	else											
 	{
 		curr->parent->right = curr->right;
 		curr->right->parent = curr->parent;
@@ -232,15 +231,15 @@ void Tree<T>::funck4(Node<T> *curr, T vl)
 {
 	Node<T> *minNode = getMinNode(curr->right);
 
-	if (curr == top)								// если удаляем вершину, то создаем ей временного родителя
+	if (curr == top)								
 	{
 		top->parent = new Node<T>(0);
 		top->parent->left = top->parent->right = top;
 	}
 
-	if (curr->right->left) {						// если у удаляемого правого ребенка есть дети/ребенок слева
+	if (curr->right->left) {						
 
-		if (minNode->right)							// ситуация, если у минимального объекта в правой ветке есть еще дети справа
+		if (minNode->right)							
 		{
 			minNode->parent->left = minNode->right;
 			minNode->right->parent = minNode->parent;
@@ -254,7 +253,7 @@ void Tree<T>::funck4(Node<T> *curr, T vl)
 		minNode->left = curr->left;
 		minNode->right = curr->right;
 
-		if (vl < curr->parent->data)				// для родителя
+		if (vl < curr->parent->data)				
 			curr->parent->left = minNode;
 		else
 			curr->parent->right = minNode;
@@ -264,7 +263,7 @@ void Tree<T>::funck4(Node<T> *curr, T vl)
 	}
 	else
 	{
-		if (vl < curr->parent->data)				// для родителя
+		if (vl < curr->parent->data)				
 			curr->parent->left = minNode;
 		else
 			curr->parent->right = minNode;
@@ -276,7 +275,7 @@ void Tree<T>::funck4(Node<T> *curr, T vl)
 		delete curr;
 	}
 
-	if (top->parent)								// если мы добавили корню дерева временного родителя, то удаляем
+	if (top->parent)								
 	{
 		top = minNode;
 		delete minNode->parent;
