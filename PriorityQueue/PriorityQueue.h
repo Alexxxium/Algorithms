@@ -16,10 +16,10 @@ public:
 		std::cerr << "\nError:\tInvalide lenght!\n";
 	}
 
-	bool isEmpty()			{ return heap.isEmpty();		}
-	size_t size()			{ return heap.size();			}
-	T pop()				    { return heap.pop();			}
-	void push(const T vl)   {		 heap.push(vl);			}
+	bool isEmpty()			{ return heap.isEmpty();	}
+	size_t size()			{ return heap.size();		}
+	T pop()				{ return heap.pop();		}
+	void push(const T vl)   	{	 heap.push(vl);		}
 	T* getArray()			{ return heap.getSortArray();	}
 
 	void out()
