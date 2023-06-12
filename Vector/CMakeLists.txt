@@ -1,0 +1,1 @@
+add_executable(Vector "Vector.cpp" "Vector.h")

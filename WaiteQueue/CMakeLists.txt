@@ -1,0 +1,1 @@
+add_executable(WaiteQueue "main.cpp" "WaiteQueue.h" "WaiteQueue.inl")

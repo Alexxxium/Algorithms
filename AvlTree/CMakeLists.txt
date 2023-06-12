@@ -1,0 +1,1 @@
+add_executable(AvlTree "AvlTree.cpp" "AvlTree.h" "AvlTree.inl")

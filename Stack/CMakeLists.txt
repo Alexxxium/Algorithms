@@ -1,0 +1,1 @@
+add_executable(Stack "Stack.cpp" "Stack.h" "Stack.inl")

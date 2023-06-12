@@ -1,0 +1,1 @@
+add_executable(HashTable "HashTable.cpp" "HashTable.h" "HashTable.inl")
