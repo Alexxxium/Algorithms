@@ -24,23 +24,30 @@ void targetFunc()
 {
 	std::cout << "Start reading...\n";
 
-	algs::WaiteQueue<void(), false> queue;
+	// thread queue
+	algs::WaiteQueue<void()> queue;
 
-	for (int i = 0; i < 8; ++i) {
+	for (int i = 0; i < 5; ++i) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		// some long process
 		if (i % 3 == 0) std::this_thread::sleep_for(std::chrono::seconds(1));
+
 		std::cout << "Add process!\n";
-		queue.push(processes);
+		queue << processes;
 	}
 
 	// waite method
 	queue.waiteAll();
 
-	for (int i = 0; i < 8; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		// some long process
 		if (i % 3 == 0) std::this_thread::sleep_for(std::chrono::seconds(1));
+
 		std::cout << "Add process!\n";
-		queue.push(processes);
+		queue << processes;
 	}
 
 	std::cout << "End reading, out of func!\n";
