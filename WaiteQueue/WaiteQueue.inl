@@ -1,88 +1,43 @@
 #include "WaiteQueue.h"
 namespace algs
 {
-	template<typename T>
-	WaiteQueue<T>::WaiteQueue():
-		target_thread(nullptr)
-	{
+	template<typename T, typename...Args>
+	WaiteQueue<T, Args...>::~WaiteQueue() { 
+		if (!funcs.empty()) waiteAll(); 
 	}
 
-	template<typename T>
-	WaiteQueue<T>::~WaiteQueue()
-	{
-		if (!queue.empty()) waiteAll();
-	}
 
-	template<typename T>
-	void WaiteQueue<T>::startProcess()
-	{
-		while (!queue.empty()) {
-			queue.front()();
-			queue.pop();
+	template<typename T, typename...Args>
+	void WaiteQueue<T, Args...>::start() {
+		while (!funcs.empty()) {
+			const auto &func = funcs.front();
+			const auto &args = funcs_args.front();
+
+			applyTupleToFunction(func, args);
+
+			funcs.pop();
+			funcs_args.pop();
 		}
 	}
+	template<typename T, typename...Args>
+	void WaiteQueue<T, Args...>::push(const std::function<T> &func, std::tuple<Args...> tuple) {
+		funcs.push(func);
+		funcs_args.push(tuple);
 
-	template<typename T>
-	void WaiteQueue<T>::wrapper()
-	{
-		if (queue.size() == 1) {
-			if (target_thread) {
-				target_thread->join();
-				delete target_thread;
+		if (funcs.size() == 1) {
+			if (target) {
+				target->join();
+				delete target;
 			}
-			target_thread = new std::thread(&WaiteQueue::startProcess, this);
+			target = new std::thread(&WaiteQueue::start, this);
 		}
 	}
-
-	template<typename T>
-	void WaiteQueue<T>::push(T *thread)
-	{
-		if (!thread) throw std::exception("Pointer is NULL!");
-
-		queue.push(thread);
-		wrapper();
-	}
-
-	template<typename T>
-	void WaiteQueue<T>::push(std::function<T> &&thread)
-	{
-		queue.push(std::move(thread));
-		wrapper();
-	}
-
-	template<typename T>
-	void WaiteQueue<T>::push(const std::function<T> &thread)
-	{
-		queue.push(thread);
-		wrapper();
-	}
-
-	template<class T>
-	auto& WaiteQueue<T>::operator<<(T *thread)
-	{
-		push(thread);
-		return *this;
-	}
-
-	template<class T>
-	auto& WaiteQueue<T>::operator<<(std::function<T> &&thread)
-	{
-		push(std::move(thread));
-		return *this;
-	}
-
-	template<class T>
-	auto& WaiteQueue<T>::operator<<(const std::function<T> &thread)
-	{
-		push(thread);
-		return *this;
-	}
-
-	template<typename T>
-	void WaiteQueue<T>::waiteAll()
-	{
-		target_thread->join();
-		delete target_thread;
-		target_thread = nullptr;
+	template<typename T, typename...Args>
+	void WaiteQueue<T, Args...>::waiteAll() {
+		std::cout << "Waite:\n";
+		if (!target) return;
+		target->join();
+		delete target;
+		target = nullptr;
 	}
 }
