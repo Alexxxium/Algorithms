@@ -2,38 +2,62 @@
 #include <functional>
 #include <thread>
 #include <queue>
-#include <tuple>
+
+
+namespace algs::fnct
+{
+	class BaseFunct
+	{
+	public:
+
+		virtual void operator()() const = 0;
+		virtual ~BaseFunct() = default;
+	};
+
+
+	template <class F, typename...Args>
+	class Funct: public BaseFunct
+	{
+	private:
+
+		const std::function<F> function;
+		const std::tuple<Args...> arguments;
+
+		Funct(Funct&&) = delete;
+		Funct(const Funct&) = delete;
+
+	public:
+
+		~Funct() = default;
+		Funct(const F &func, Args...args);
+
+		void operator()() const override;
+	};
+}
 
 
 namespace algs
 {
-	template <class T, typename... Args>
 	class WaiteQueue
 	{
 	private:
 
-		std::queue<std::function<T>> funcs;
-		std::queue<std::tuple<Args...>> funcs_args;
 		std::thread *target = nullptr;
+		std::queue<fnct::BaseFunct*> queue;
+
+		WaiteQueue(WaiteQueue&&) = delete;
+		WaiteQueue(const WaiteQueue&) = delete;
 
 	public:
 
+		WaiteQueue();
 		~WaiteQueue();
+
+		template<typename F, typename...Args>
+		void push(const F &func, Args&&...args);
+
 		void start();
-		void push(const std::function<T> &func, std::tuple<Args...> tuple);
-		void waiteAll();
-
-
-		template <typename Function, typename Tuple, std::size_t... Indices>
-		decltype(auto) applyTupleToFunction(Function&& func, Tuple&& tuple, std::index_sequence<Indices...>) {
-			return std::invoke(std::forward<Function>(func), std::get<Indices>(std::forward<Tuple>(tuple))...);
-		}
-
-		template <typename Function, typename... Aargs>
-		decltype(auto) applyTupleToFunction(Function&& func, const std::tuple<Aargs...>& tuple) {
-			constexpr std::size_t tupleSize = sizeof...(Args);
-			return applyTupleToFunction(std::forward<Function>(func), tuple, std::make_index_sequence<tupleSize>());
-		}
+		void waite();
 	};
 }
 
