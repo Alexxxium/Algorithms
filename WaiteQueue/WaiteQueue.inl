@@ -1,36 +1,42 @@
-#include "WaiteQueue.h"
-
 namespace algs::fnct
 {
-	template<class F, typename ...Args>
-	inline Funct<F, Args...>::Funct(const F &func, Args...args):
-		function(func),
-		arguments(args...)
+	template<class T, class R>
+	inline FunctWhith<T, R>::FunctWhith(const T &funct, R &r_val):
+		functor(funct),
+		return_value(r_val)
 	{
 	}
-	template<class F, typename ...Args>
-	void Funct<F, Args...>::operator()() const
+	template<class T>
+	inline FunctWhithout<T>::FunctWhithout(const T &funct):
+		functor(funct)
 	{
-		std::apply(function, arguments);
+	}
+
+	template<class T, class R>
+	void FunctWhith<T, R>::operator()() const {
+		return_value = functor();
+	}
+	template<class T>
+	void FunctWhithout<T>::operator()() const {
+		functor();
 	}
 }
 
 namespace algs
 {
-	template<typename F, typename...Args>
-	void WaiteQueue::push(const F &func, Args&&...args)
-	{
-		if (!func) throw std::exception("Funñtion pointer is null!");
-
-		fnct::BaseFunct *item = new fnct::Funct<F, Args...>(func, args...);
+	template<typename T, typename R>
+	void WaiteQueue::push(const T &funct, R &r_val) {
+		fnct::Funct *item = new fnct::FunctWhith<T, R>(funct, r_val);
 		queue.push(item);
 
-		if (queue.size() == 1) {
-			if (target) {
-				target->join();
-				delete target;
-			}
-			target = new std::thread(&WaiteQueue::start, this);
-		}
+		wrapper();
+	}
+
+	template<typename T>
+	void WaiteQueue::push(const T &funct) {
+		fnct::Funct *item = new fnct::FunctWhithout<T>(funct);
+		queue.push(item);
+
+		wrapper();
 	}
 }

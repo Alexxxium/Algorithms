@@ -3,38 +3,53 @@
 #include <thread>
 #include <queue>
 
-
 namespace algs::fnct
 {
-	class BaseFunct
+	class Funct
 	{
 	public:
 
 		virtual void operator()() const = 0;
-		virtual ~BaseFunct() = default;
+		virtual ~Funct() = default;
 	};
 
-
-	template <class F, typename...Args>
-	class Funct: public BaseFunct
+	template<class T, class R>
+	class FunctWhith: public Funct
 	{
 	private:
 
-		const std::function<F> function;
-		const std::tuple<Args...> arguments;
+		T functor;
+		R &return_value;
 
-		Funct(Funct&&) = delete;
-		Funct(const Funct&) = delete;
+		FunctWhith(FunctWhith&&) = delete;
+		FunctWhith(const FunctWhith&) = delete;
 
 	public:
 
-		~Funct() = default;
-		Funct(const F &func, Args...args);
+		~FunctWhith() = default;
+		FunctWhith(const T &funct, R &r_val);
+
+		void operator()() const override;
+	};
+
+	template<class T>
+	class FunctWhithout: public Funct
+	{
+	private:
+
+		T functor;
+
+		FunctWhithout(FunctWhithout&&) = delete;
+		FunctWhithout(const FunctWhithout&) = delete;
+
+	public:
+
+		~FunctWhithout() = default;
+		FunctWhithout(const T &funct);
 
 		void operator()() const override;
 	};
 }
-
 
 namespace algs
 {
@@ -42,21 +57,27 @@ namespace algs
 	{
 	private:
 
-		std::thread *target = nullptr;
-		std::queue<fnct::BaseFunct*> queue;
+		std::thread *target;
+		std::queue<fnct::Funct*> queue;
 
 		WaiteQueue(WaiteQueue&&) = delete;
 		WaiteQueue(const WaiteQueue&) = delete;
 
+		void start();
+		void wrapper();
+
 	public:
 
-		WaiteQueue();
 		~WaiteQueue();
 
-		template<typename F, typename...Args>
-		void push(const F &func, Args&&...args);
+		WaiteQueue();
 
-		void start();
+		template<typename T, typename R>
+		void push(const T &funct, R &r_val);
+
+		template<typename T>
+		void push(const T &funct);
+
 		void waite();
 	};
 }
