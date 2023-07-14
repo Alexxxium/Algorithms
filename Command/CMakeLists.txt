@@ -1,0 +1,1 @@
+add_executable(Command "Command.cpp" "Command.h")

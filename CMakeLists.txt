@@ -7,6 +7,7 @@ project ("ALGS")
 
 add_subdirectory ("AvlTree")
 add_subdirectory ("BinarySearch")
+add_subdirectory ("Command")
 add_subdirectory ("HashTable")
 add_subdirectory ("Heap")
 add_subdirectory ("LinkList")
