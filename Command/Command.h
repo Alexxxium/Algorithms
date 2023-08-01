@@ -20,16 +20,16 @@ namespace algs
 		virtual void perfomAction() = 0;
 	};
 
-	class Invoker
+	class Subject
 	{
 	protected:
 		std::vector<Command*> commands;
 
 	public:
-		explicit Invoker(const int &size): commands(size) 
+		explicit Subject(const int &size): commands(size) 
 		{
 		}
-		virtual ~Invoker() { 
+		virtual ~Subject() { 
 			for (Command *i : commands) {
 				delete i;
 			}

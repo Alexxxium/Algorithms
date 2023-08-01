@@ -42,11 +42,11 @@ public:
     }
 };
 
-class Invoker_A: public algs::Invoker, public algs::Buffer
+class Invoker_A: public algs::Subject, public algs::Buffer
 {
 public:
     explicit Invoker_A(const int &size): 
-        Invoker(size)
+        Subject(size)
     {
     }
     void run() override {
