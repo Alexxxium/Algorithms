@@ -1,0 +1,1 @@
+add_executable(FactoryMethod "FactoryMethod.h" "FactoryMethod.cpp")
