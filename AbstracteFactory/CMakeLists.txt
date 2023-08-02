@@ -1,0 +1,1 @@
+add_executable(AbstracteFactory "AbstracteFactory.h" "AbstracteFactory.cpp")

@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 project ("Algorithms")
 
 
+add_subdirectory ("AbstracteFactory")
 add_subdirectory ("AvlTree")
 add_subdirectory ("BinarySearch")
 add_subdirectory ("Command")
