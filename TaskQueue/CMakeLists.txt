@@ -1,0 +1,1 @@
+add_executable(TaskQueue "TaskQueue.h" "TaskQueue.cpp" "main.cpp")
