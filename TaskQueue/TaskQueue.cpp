@@ -2,10 +2,10 @@
 #include <iostream>
 
 
+
 namespace algs
 {
-
-	TaskQueue::TaskQueue() :
+	TaskQueue::TaskQueue():
 		pause(false),
 		quit(false),
 		target(std::thread(&TaskQueue::start, this))
@@ -24,21 +24,21 @@ namespace algs
 
 	void TaskQueue::addTasks(const std::initializer_list<std::function<void()>> &tasks) {
 		std::lock_guard<std::mutex> lock(mutex);
-		for (const auto &task : tasks) {
+		for (const auto &task: tasks) {
 			queue.push(task);
 		}
 	}
 
-	bool TaskQueue::empty() {
+	bool TaskQueue::empty() noexcept {
 		std::lock_guard<std::mutex> lock(mutex);
 		return queue.empty();
 	}
 
-	void TaskQueue::freeze() {
+	void TaskQueue::freeze() noexcept {
 		pause.store(true);
 	}
 
-	void TaskQueue::unfreeze() {
+	void TaskQueue::unfreeze() noexcept {
 		pause.store(false);
 	}
 
@@ -62,7 +62,7 @@ namespace algs
 		target.join();
 	}
 
-	void TaskQueue::run() {
+	void TaskQueue::run() noexcept {
 		if (quit.load()) {
 			quit.store(false);
 			pause.store(false);

@@ -37,21 +37,21 @@ namespace algs
 
 
 		// Return target queue status
-		bool empty();
+		bool empty() noexcept;
 
-		// Freeze target thread and active waiting of unfreezing
-		void freeze();
+		// Freeze target thread and activly waiting of unfreezing
+		void freeze() noexcept;
 
-		// Unfreeze target thread if he was freezed
-		void unfreeze();
+		// Unfreeze the target thread if it has been frozen
+		void unfreeze() noexcept;
 
-		// Waiting all tasks in main thread
+		// Waiting for all tasks in the main thread
 		void wait();
 
-		// Break targed thread before executing current task (break active waitin tasks)
+		// Break the target thread after running the current task (abort active waiting tasks)
 		void crash();
 
 		// Start/restart target thread
-		void run();
+		void run() noexcept;
 	};
 }
