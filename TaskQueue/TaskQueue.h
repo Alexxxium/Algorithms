@@ -1,3 +1,4 @@
+#pragma once
 #include <initializer_list>
 #include <functional>
 #include <string>
@@ -15,8 +16,8 @@ namespace algs
 	/// You can wait/break complited task in the main thread
 	class TaskQueue {
 	private:
-		std::mutex mutex;
 		std::thread target;
+		mutable std::mutex mutex;
 
 		std::atomic<bool> pause, quit;
 		std::queue<std::function<void()>> queue;
@@ -36,8 +37,10 @@ namespace algs
 		void addTasks(const std::initializer_list<std::function<void()>> &tasks);
 
 
-		// Return target queue status
-		bool empty() noexcept;
+		size_t size() const noexcept;
+
+		bool empty() const noexcept;
+
 
 		// Freeze target thread and activly waiting of unfreezing
 		void freeze() noexcept;
@@ -45,13 +48,13 @@ namespace algs
 		// Unfreeze the target thread if it has been frozen
 		void unfreeze() noexcept;
 
+		// Start/restart target thread
+		void run() noexcept;
+
 		// Waiting for all tasks in the main thread
 		void wait();
 
 		// Break the target thread after running the current task (abort active waiting tasks)
 		void crash();
-
-		// Start/restart target thread
-		void run() noexcept;
 	};
 }

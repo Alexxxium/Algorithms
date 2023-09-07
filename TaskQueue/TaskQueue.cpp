@@ -17,6 +17,8 @@ namespace algs
 		crash();
 	}
 
+
+
 	void TaskQueue::addTask(const std::function<void()> &task) {
 		std::lock_guard<std::mutex> lock(mutex);
 		queue.push(task);
@@ -29,10 +31,19 @@ namespace algs
 		}
 	}
 
-	bool TaskQueue::empty() noexcept {
+
+
+	size_t TaskQueue::size() const noexcept {
+		std::lock_guard<std::mutex> lock(mutex);
+		return queue.size();
+	}
+
+	bool TaskQueue::empty() const noexcept {
 		std::lock_guard<std::mutex> lock(mutex);
 		return queue.empty();
 	}
+
+
 
 	void TaskQueue::freeze() noexcept {
 		pause.store(true);
@@ -41,6 +52,16 @@ namespace algs
 	void TaskQueue::unfreeze() noexcept {
 		pause.store(false);
 	}
+
+	void TaskQueue::run() noexcept {
+		if (quit.load()) {
+			quit.store(false);
+			pause.store(false);
+			target = std::thread(&TaskQueue::start, this);
+		}
+	}
+
+
 
 	void TaskQueue::wait() {
 		constexpr int milsec = 100;
@@ -62,13 +83,7 @@ namespace algs
 		target.join();
 	}
 
-	void TaskQueue::run() noexcept {
-		if (quit.load()) {
-			quit.store(false);
-			pause.store(false);
-			target = std::thread(&TaskQueue::start, this);
-		}
-	}
+	
 
 	void TaskQueue::start() {
 		constexpr int milsec = 100;

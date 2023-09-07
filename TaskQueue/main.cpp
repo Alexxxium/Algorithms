@@ -1,7 +1,6 @@
 #include <iostream>
 #include "TaskQueue.h"
 
-
 int g = 0;
 
 void sleep(uint64_t ms) {
@@ -57,4 +56,6 @@ int main()
 
 	queue.wait();
 	st();
+
+	queue.size();
 }
